@@ -141,7 +141,7 @@ def login():
 @app.get('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', **campus['dashboard_data']())
 
 
 @app.post('/logout')
@@ -173,8 +173,11 @@ from mfa import install_mfa
 begin_mfa_login, MFAChallenge = install_mfa(app, db, User, limiter, audit_event)
 
 
+from campus import install_campus
+campus = install_campus(app, db, User, audit_event)
+
 from admin import install_admin
-install_admin(app, db, User, login_manager, AuditEvent, audit_event)
+install_admin(app, db, User, login_manager, AuditEvent, audit_event, campus)
 
 
 if __name__ == '__main__':

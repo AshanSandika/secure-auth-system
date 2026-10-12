@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin | Secure Auth</title>
-<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0}.card{width:100%;max-width:1000px;padding:32px;border:1px solid #334155;border-radius:16px;background:#1e293b}h1{margin-top:0}p{line-height:1.6}.field{margin-top:20px}label{display:block;margin-bottom:8px}input,button{width:100%;padding:12px;border:1px solid #64748b;border-radius:8px;background:#0f172a;color:white;font:inherit}input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #38bdf8;outline-offset:3px}input[type=submit],button{margin-top:24px;border:0;background:#38bdf8;color:#082f49;font-weight:bold;cursor:pointer}.error{color:#fca5a5;font-size:14px}.message{padding:12px;background:#0f172a;border-left:3px solid #38bdf8}a{color:#7dd3fc}.muted{color:#cbd5e1}.tag{font-size:12px;letter-spacing:2px;color:#7dd3fc}</style>
-</head>
-<body><main class="card">
-<p class="tag">SECURE AUTH / LOCAL LAB</p>
-<h1>Admin dashboard</h1>
+{% extends 'base.html' %}{% block content %}<section class='panel'><div class="page-head"><div><p class="eyebrow">ADMINISTRATION</p><h1>Admin dashboard</h1></div><a class="btn" href="{{ url_for('admin.manage_announcements') }}">Publish announcement</a></div><p><a href="{{ url_for('admin.manage_courses') }}">Create a course →</a></p>
 <p><a href="{{ url_for('admin.logs') }}">View security audit logs</a></p>
 <p class="muted">User directory · {{ users.total }} registered accounts</p>
 <div style="overflow-x:auto">
@@ -32,4 +22,4 @@ Page {{ users.page }}
 {% if users.has_next %}<a href="{{ url_for('admin.index', page=users.next_num) }}">Next</a>{% endif %}
 </p>
 <p><a href="{{ url_for('dashboard') }}">Back to your dashboard</a></p>
-</main></body></html>
+</section>{% endblock %}

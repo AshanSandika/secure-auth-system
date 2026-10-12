@@ -4,7 +4,7 @@ from flask import Blueprint, abort, render_template, session, request
 from flask_login import current_user
 
 
-def install_admin(app, db, User, login_manager, AuditEvent, audit_event):
+def install_admin(app, db, User, login_manager, AuditEvent, audit_event, campus):
     admin = Blueprint('admin', __name__, url_prefix='/admin')
 
     @admin.before_request
@@ -43,6 +43,8 @@ def install_admin(app, db, User, login_manager, AuditEvent, audit_event):
                              per_page=30, max_per_page=30, error_out=False)
         return render_template('audit_logs.html', events=events, event_filter=event_filter)
 
+    admin.add_url_rule('/courses', 'manage_courses', campus['admin_courses'], methods=['GET', 'POST'])
+    admin.add_url_rule('/announcements', 'manage_announcements', campus['admin_announcements'], methods=['GET', 'POST'])
     app.register_blueprint(admin)
 
     @app.errorhandler(403)

@@ -17,7 +17,7 @@ def install_audit(app, db):
         endpoint = db.Column(db.String(80), nullable=False)
         status = db.Column(db.Integer, nullable=True)
 
-    allowed = {'register_success', 'register_rejected', 'login_failed', 'login_success',
+    allowed = {'profile_updated', 'course_enrolled', 'course_dropped', 'course_created', 'announcement_published', 'register_success', 'register_rejected', 'login_failed', 'login_success',
                'mfa_required', 'mfa_failed', 'mfa_success', 'mfa_enabled',
                'mfa_setup_password_failed', 'recovery_login_success', 'recovery_codes_generated',
                'recovery_generation_failed', 'logout', 'admin_access_denied', 'admin_access_granted',
