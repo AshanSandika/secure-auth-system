@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit logs | Secure Auth</title>
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0}.card{width:100%;max-width:1000px;padding:32px;border:1px solid #334155;border-radius:16px;background:#1e293b}h1{margin-top:0}p{line-height:1.6}.field{margin-top:20px}label{display:block;margin-bottom:8px}input,button{width:100%;padding:12px;border:1px solid #64748b;border-radius:8px;background:#0f172a;color:white;font:inherit}input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #38bdf8;outline-offset:3px}input[type=submit],button{margin-top:24px;border:0;background:#38bdf8;color:#082f49;font-weight:bold;cursor:pointer}.error{color:#fca5a5;font-size:14px}.message{padding:12px;background:#0f172a;border-left:3px solid #38bdf8}a{color:#7dd3fc}.muted{color:#cbd5e1}.tag{font-size:12px;letter-spacing:2px;color:#7dd3fc}</style>
+</head>
+<body><main class="card">
+<p class="tag">SECURE AUTH / LOCAL LAB</p>
+<h1>Security audit logs</h1>
+<p class="muted">Newest first · UTC timestamps · {{ events.total }} matching events</p>
+<form method="GET" action="{{ url_for('admin.logs') }}">
+<label for="event">Event name (leave empty for all)</label>
+<input id="event" name="event" value="{{ event_filter }}" maxlength="50" placeholder="login_failed">
+<button type="submit">Filter events</button>
+</form>
+<div style="overflow-x:auto;margin-top:24px">
+<table style="width:100%;text-align:left;border-collapse:collapse">
+<thead><tr><th>Time (UTC)</th><th>Event</th><th>User ID</th><th>Source IP</th><th>Endpoint</th><th>HTTP</th></tr></thead>
+<tbody>{% for row in events.items %}<tr>
+<td style="padding:10px">{{ row.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+<td style="padding:10px">{{ row.event }}</td><td style="padding:10px">{{ row.user_id if row.user_id is not none else '—' }}</td>
+<td style="padding:10px">{{ row.source }}</td><td style="padding:10px">{{ row.endpoint }}</td><td style="padding:10px">{{ row.status if row.status is not none else 'CLI' }}</td>
+</tr>{% else %}<tr><td colspan="6">No matching events yet. Perform a login or logout and refresh.</td></tr>{% endfor %}</tbody>
+</table></div>
+<p>{% if events.has_prev %}<a href="{{ url_for('admin.logs', page=events.prev_num, event=event_filter) }}">Previous</a>{% endif %}
+Page {{ events.page }}
+{% if events.has_next %}<a href="{{ url_for('admin.logs', page=events.next_num, event=event_filter) }}">Next</a>{% endif %}</p>
+<p><a href="{{ url_for('admin.index') }}">Back to admin dashboard</a></p>
+</main></body></html>

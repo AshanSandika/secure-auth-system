@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | Secure Auth</title>
+<style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0}.card{width:100%;max-width:460px;padding:32px;border:1px solid #334155;border-radius:16px;background:#1e293b}h1{margin-top:0}p{line-height:1.6}.field{margin-top:20px}label{display:block;margin-bottom:8px}input,button{width:100%;padding:12px;border:1px solid #64748b;border-radius:8px;background:#0f172a;color:white;font:inherit}input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #38bdf8;outline-offset:3px}input[type=submit],button{margin-top:24px;border:0;background:#38bdf8;color:#082f49;font-weight:bold;cursor:pointer}.error{color:#fca5a5;font-size:14px}.message{padding:12px;background:#0f172a;border-left:3px solid #38bdf8}a{color:#7dd3fc}.muted{color:#cbd5e1}.tag{font-size:12px;letter-spacing:2px;color:#7dd3fc}</style>
+</head>
+<body><main class="card">
+<p class="tag">SECURE AUTH / LOCAL LAB</p>
+<h1>Your dashboard</h1>
+{% if current_user.role == 'admin' %}
+<p><a href="{{ url_for('admin.index') }}">Open admin dashboard</a></p>
+{% endif %}
+<p class="message">You are logged in successfully.</p>
+<p><strong>Email:</strong> {{ current_user.email }}</p>
+<p><strong>Role:</strong> {{ current_user.role }}</p>
+<p><strong>MFA:</strong> {{ 'Enabled' if current_user.mfa_enabled else 'Disabled' }}</p>
+{% if current_user.mfa_enabled %}
+<p><a href="{{ url_for('recovery_codes') }}">Generate recovery codes</a></p>
+{% endif %}
+{% if not current_user.mfa_enabled %}
+<p><a href="{{ url_for('mfa_setup') }}">Enable MFA</a></p>
+{% endif %}
+<form method="POST" action="{{ url_for('logout') }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<button type="submit">Log out</button>
+</form>
+</main></body>
+</html>
